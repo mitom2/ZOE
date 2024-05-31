@@ -7,7 +7,7 @@
 
 #define gpuModulePort 0b10101010
 #define gpuSpeed 2000
-#define characterSizeX 19
+#define characterSizeX 20
 #define characterSizeY 32
 
 #define cmd_ClearScreen				0b10000000
