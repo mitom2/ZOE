@@ -1,0 +1,17 @@
+
+*.vsidx
+*.db
+*.json
+*.ipch
+*.vcxproj
+*.filters
+*.filters
+*.user
+*.obj
+*.ilk
+*.log
+*.tlog
+*.idb
+*.pdb
+The Emulator/.vs/The Emulator/v17/.suo
+*.recipe
