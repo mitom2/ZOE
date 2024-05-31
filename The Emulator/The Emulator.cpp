@@ -83,11 +83,15 @@ int main()
 	gpu.controlInput(gpuModulePort, 0b01110000);
 	gpu.controlInput(gpuModulePort, '1');
 
-	//Move pointer right-down by 15x5
+	//Draw character
+	gpu.controlInput(gpuModulePort, 0b01110000);
+	gpu.controlInput(gpuModulePort, 'A');
+
+	//Move pointer right-down by 15x35
 	gpu.controlInput(gpuModulePort, 0b11000011);
 	gpu.controlInput(gpuModulePort, 5);
 	gpu.controlInput(gpuModulePort, 0);
-	gpu.controlInput(gpuModulePort, 15);
+	gpu.controlInput(gpuModulePort, 35);
 	gpu.controlInput(gpuModulePort, 0);
 
 	//Draw line to 25x5
@@ -110,6 +114,24 @@ int main()
 
 	//Draw pixel
 	gpu.controlInput(gpuModulePort, 0b01000000);
+
+	//Set color white
+	gpu.controlInput(gpuModulePort, 0b11100000);
+	gpu.controlInput(gpuModulePort, 0b00111111);
+
+	//Set pointer to 5x150
+	gpu.controlInput(gpuModulePort, 0b11000000);
+	gpu.controlInput(gpuModulePort, 5);
+	gpu.controlInput(gpuModulePort, 0);
+	gpu.controlInput(gpuModulePort, 150);
+	gpu.controlInput(gpuModulePort, 0);
+
+	//Display all characters
+	for (unsigned char c = 0; c < 255; c++)
+	{
+		gpu.controlInput(gpuModulePort, 0b01110000);
+		gpu.controlInput(gpuModulePort, c);
+	}
 
 	int in = 0;
 	while (in != -1)

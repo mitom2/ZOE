@@ -1,21 +1,82 @@
 #include "gpuModule.hpp"
 
+bool GpuModule::createCharacterFile(char character, int x, int y)
+{
+    std::string nm = "gpuCharacters/" + std::to_string(character) + ".gpu";
+    std::ofstream charFile(nm);
+    if (charFile.good() == false)
+    {
+        charFile.close();
+        throw std::exception("GPU could not create character file");
+        return true;
+    }
+    sf::Font font;
+    if (font.loadFromFile("gpuCharacters/ChivoMono-Regular.ttf") == false)
+    {
+        charFile.close();
+        throw std::exception("GPU could load character definition");
+        return true;
+    }
+    std::string c = "_";
+    c[0] = character;
+    sf::Text ch(c, font, characterSizeY);
+    sf::RenderTexture rendT;
+    if (rendT.create(characterSizeX, characterSizeY) == false)
+    {
+        throw std::exception("GPU could not generate character");
+        return true;
+    }
+    ch.setOrigin(0, 0);
+    ch.setPosition(0, -characterSizeY / 5);
+    ch.setFillColor(sf::Color::Black);
+    rendT.clear(sf::Color::White);
+    rendT.draw(ch);
+    rendT.display();
+    sf::Image img = rendT.getTexture().copyToImage();
+    img.saveToFile("t.png");
+    bool res = true;
+    for (int iy = 0; iy < img.getSize().y; iy++)
+    {
+        for (int ix = 0; ix < img.getSize().x; ix++)
+        {
+            if (img.getPixel(ix, iy) != sf::Color::White)
+            {
+                charFile << c << " ";
+                if (x == ix && y == iy)
+                    res = true;
+            }
+            else
+            {
+                if (character == '0')
+                    charFile << "_ ";
+                else
+                    charFile << "0 ";
+                if (x == ix && y == iy)
+                    res = false;
+            }
+        }
+        charFile << std::endl;
+    }
+    charFile.close();
+    return res;
+}
+
 bool GpuModule::characterPixel(char character, int x, int y)
 {
     std::string nm = "gpuCharacters/" + std::to_string(character) + ".gpu";
     std::ifstream charFile(nm);
     if (charFile.good() == false)
     {
-        throw std::exception("Could not load GPU character file");
-        return true;
+        charFile.close();
+        return GpuModule::createCharacterFile(character, x, y);
     }
     char in = 0;
-    for (int i = 0; i < characterSize; i++)
+    for (int i = 0; i < characterSizeX * characterSizeY; i++)
     {
         charFile >> in;
         if (charFile.eof() == true)
             break;
-        if (i == y * std::sqrt(characterSize / 2) + x)
+        if (i == y * characterSizeX + x)
         {
             return in == character;
         }
@@ -276,7 +337,7 @@ void GpuModule::interpretCommand(sf::Image& pixels, float& cx, float& cy, uint32
             else if (st > 2)
                 break;
         }
-        if (GpuModule::characterPixel(character, (int)ctr % (int)std::sqrt(characterSize / 2), ctr / std::sqrt(characterSize / 2)) == true)
+        if (GpuModule::characterPixel(character, (int)ctr % characterSizeX, ctr / characterSizeX) == true)
         {
             if (cx < 640 && cy < 480 && cx >= 0 && cy >= 0)
                 pixels.setPixel(cx, cy, sf::Color(color));
@@ -284,22 +345,22 @@ void GpuModule::interpretCommand(sf::Image& pixels, float& cx, float& cy, uint32
         ctr++;
         cx++;
         step++;
-        if (step >= std::sqrt(characterSize / 2))
+        if (step >= characterSizeX)
         {
             cx = dx;
             cy++;
             step = 0;
         }
-        if (ctr + 1 > characterSize)
+        if (ctr + 1 > characterSizeX * characterSizeY)
         {
             ctr = 0;
             step = 0;
             cy = dy;
-            cx = dx + std::sqrt(characterSize / 2) + 1;
+            cx = dx + characterSizeX + 1;
             if (cx >= 640)
             {
                 cx = 0;
-                cy++;
+                cy += characterSizeY + 1;
             }
             GpuModule::commands.pop_front();
             GpuModule::commands.pop_front();

@@ -15,3 +15,7 @@
 *.pdb
 The Emulator/.vs/The Emulator/v17/.suo
 *.recipe
+*.gpu
+*.db-shm
+*.db-wal
+*.opendb

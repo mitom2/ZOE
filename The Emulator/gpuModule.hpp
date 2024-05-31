@@ -7,7 +7,8 @@
 
 #define gpuModulePort 0b10101010
 #define gpuSpeed 5000
-#define characterSize 512
+#define characterSizeX 19
+#define characterSizeY 32
 
 #define cmd_ClearScreen				0b10000000
 #define cmd_SetPointer				0b11000000
@@ -23,6 +24,8 @@ class GpuModule
 {
 	std::mutex listMtx;
 	std::list<unsigned char> commands;
+
+	bool createCharacterFile(char character, int x, int y);
 
 	bool characterPixel(char character, int x, int y);
 
