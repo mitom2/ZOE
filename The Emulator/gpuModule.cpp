@@ -424,7 +424,8 @@ void GpuModule::display()
         displ.setTexture(tx, true);
         window.clear(sf::Color::Black);
         window.draw(displ);
-        window.draw(cur);
+        if (hideCur == false)
+            window.draw(cur);
         window.display();
     }
 }

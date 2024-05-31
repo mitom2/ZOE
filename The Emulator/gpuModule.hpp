@@ -5,6 +5,8 @@
 #include <cmath>
 #include <fstream>
 
+#define hideCur true
+
 #define gpuModulePort 0b10101010
 #define gpuSpeed 2000
 #define characterSizeX 20
