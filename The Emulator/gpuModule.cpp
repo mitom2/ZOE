@@ -28,8 +28,8 @@ bool GpuModule::createCharacterFile(char character, int x, int y)
     }
     ch.setOrigin(0, 0);
     ch.setPosition(0, -characterSizeY / 5);
-    ch.setFillColor(sf::Color::Black);
-    rendT.clear(sf::Color::White);
+    ch.setFillColor(sf::Color::Red);
+    rendT.clear(sf::Color::Black);
     rendT.draw(ch);
     rendT.display();
     sf::Image img = rendT.getTexture().copyToImage();
@@ -38,7 +38,7 @@ bool GpuModule::createCharacterFile(char character, int x, int y)
     {
         for (int ix = 0; ix < img.getSize().x; ix++)
         {
-            if (img.getPixel(ix, iy) != sf::Color::White)
+            if (img.getPixel(ix, iy).r > gpuCharGenThr)
             {
                 charFile << c << " ";
                 if (x == ix && y == iy)

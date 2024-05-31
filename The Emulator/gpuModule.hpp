@@ -6,11 +6,12 @@
 #include <fstream>
 
 #define hideCur true
+#define gpuCharGenThr 128
 
 #define gpuModulePort 0b10101010
 #define gpuSpeed 2000
-#define characterSizeX 20
-#define characterSizeY 32
+#define characterSizeX 11
+#define characterSizeY 16
 
 #define cmd_ClearScreen				0b10000000
 #define cmd_SetPointer				0b11000000
