@@ -33,7 +33,6 @@ bool GpuModule::createCharacterFile(char character, int x, int y)
     rendT.draw(ch);
     rendT.display();
     sf::Image img = rendT.getTexture().copyToImage();
-    img.saveToFile("t.png");
     bool res = true;
     for (int iy = 0; iy < img.getSize().y; iy++)
     {
@@ -392,6 +391,11 @@ void GpuModule::display()
     cur.setPosition(0, 0);
     cur.setFillColor(sf::Color(0, 0, 255, 128));
 
+    float fps;
+    sf::Clock clock = sf::Clock::Clock();
+    sf::Time previousTime = clock.getElapsedTime();
+    sf::Time currentTime;
+
     while (window.isOpen())
     {
         GpuModule::listMtx.lock();
@@ -399,6 +403,7 @@ void GpuModule::display()
         {
             if (GpuModule::commands.size() > 0)
                 GpuModule::interpretCommand(screen, cx, cy, color, dx, dy, step, ctr);
+            else break;
         }
         GpuModule::listMtx.unlock();
 
@@ -408,6 +413,11 @@ void GpuModule::display()
             //if (event.type == sf::Event::Closed)
                 //window.close();
         }
+
+        currentTime = clock.getElapsedTime();
+        fps = 1.0f / (currentTime.asSeconds() - previousTime.asSeconds());
+        previousTime = currentTime;
+        window.setTitle("Z80 PC | " + std::to_string(fps) + " FPS");
 
         cur.setPosition(cx - 5, cy - 5);
         tx.loadFromImage(screen);

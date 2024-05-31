@@ -19,3 +19,5 @@ The Emulator/.vs/The Emulator/v17/.suo
 *.db-shm
 *.db-wal
 *.opendb
+*.iobj
+*.ipdb

@@ -6,7 +6,7 @@
 #include <fstream>
 
 #define gpuModulePort 0b10101010
-#define gpuSpeed 5000
+#define gpuSpeed 2000
 #define characterSizeX 19
 #define characterSizeY 32
 
