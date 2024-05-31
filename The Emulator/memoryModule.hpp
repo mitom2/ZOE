@@ -1,13 +1,16 @@
 #pragma once
 #include <unordered_map>
 #include <cstdint>
+#include <string>
+#include <fstream>
 
 #define memoryModulePort 0b10111100
 
 class MemoryModule
 {
-
 public:
+
+	bool loadOS(std::string path);
 
 	struct MemoryPage
 	{
@@ -32,7 +35,3 @@ public:
 	void controlOperation(unsigned short addr, unsigned char value);
 
 };
-
-unsigned char memoryRead(void* arg, unsigned short addr);
-
-void memoryWrite(void* arg, unsigned short addr, unsigned char value);

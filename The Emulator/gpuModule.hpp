@@ -6,7 +6,7 @@
 #include <fstream>
 
 #define hideCur true
-#define gpuCharGenThr 128
+#define gpuCharGenThr 96
 
 #define gpuModulePort 0b10101010
 #define gpuSpeed 2000
@@ -28,6 +28,8 @@ class GpuModule
 	std::mutex listMtx;
 	std::list<unsigned char> commands;
 
+	bool enabled;
+
 	bool createCharacterFile(char character, int x, int y);
 
 	bool characterPixel(char character, int x, int y);
@@ -39,5 +41,7 @@ public:
 	void display();
 
 	void controlInput(unsigned short address, unsigned char value);
+
+	void turnOff();
 
 };

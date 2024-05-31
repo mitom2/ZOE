@@ -373,7 +373,8 @@ void GpuModule::interpretCommand(sf::Image& pixels, float& cx, float& cy, uint32
 
 void GpuModule::display()
 {
-    sf::RenderWindow window(sf::VideoMode(640, 480), "Z80 PC", sf::Style::Resize);
+    GpuModule::enabled = true;
+    sf::RenderWindow window(sf::VideoMode(640, 480), "Z80 PC Virtual Display", sf::Style::Resize);
     sf::Image screen;
     screen.create(640, 480, sf::Color::Black);
     sf::Texture tx;
@@ -398,6 +399,8 @@ void GpuModule::display()
 
     while (window.isOpen())
     {
+        if (GpuModule::enabled == false)
+            break;
         GpuModule::listMtx.lock();
         for (int i = 0; i < gpuSpeed; i++)
         {
@@ -417,7 +420,7 @@ void GpuModule::display()
         currentTime = clock.getElapsedTime();
         fps = 1.0f / (currentTime.asSeconds() - previousTime.asSeconds());
         previousTime = currentTime;
-        window.setTitle("Z80 PC | " + std::to_string(fps) + " FPS");
+        window.setTitle("Z80 PC Virtual Display | " + std::to_string(fps) + " FPS");
 
         cur.setPosition(cx - 5, cy - 5);
         tx.loadFromImage(screen);
@@ -440,4 +443,9 @@ void GpuModule::controlInput(unsigned short address, unsigned char value)
     GpuModule::listMtx.lock();
     GpuModule::commands.push_back(value);
     GpuModule::listMtx.unlock();
+}
+
+void GpuModule::turnOff()
+{
+    GpuModule::enabled = false;
 }

@@ -1,5 +1,22 @@
 #include "memoryModule.hpp"
 
+bool MemoryModule::loadOS(std::string path)
+{
+	std::ifstream in(path);
+	if (in.good() == false)
+	{
+		in.close();
+		return false;
+	}
+	unsigned char input;
+	for (int i = 0; in >> input; i++)
+	{
+		MemoryModule::romPages[0]->data[i] = input;
+	}
+	in.close();
+	return true;
+}
+
 MemoryModule::MemoryModule()
 {
 	MemoryModule::maxPage = 0x40;
@@ -55,32 +72,4 @@ void MemoryModule::controlOperation(unsigned short addr, unsigned char value)
 		}
 		MemoryModule::addressSpace[0] = MemoryModule::romPages[value];
 	}
-}
-
-unsigned char memoryRead(void* arg, unsigned short addr)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		if (addr < 0x4000)
-		{
-			return ((MemoryModule*)arg)->addressSpace[i]->data[addr];
-		}
-		addr -= 0x4000;
-	}
-	throw std::exception("Memory read beyond address space");
-	return 0x76;
-}
-
-void memoryWrite(void* arg, unsigned short addr, unsigned char value)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		if (addr < 0x4000)
-		{
-			((MemoryModule*)arg)->addressSpace[i]->data[addr] = value;
-			return;
-		}
-		addr -= 0x4000;
-	}
-	throw std::exception("Memory write beyond address space");
 }
