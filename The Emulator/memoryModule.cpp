@@ -11,6 +11,8 @@ bool MemoryModule::loadOS(std::string path)
 	unsigned char input;
 	for (int i = 0; in >> input; i++)
 	{
+		if (i == 0x4000)
+			break;
 		MemoryModule::romPages[0]->data[i] = input;
 	}
 	in.close();

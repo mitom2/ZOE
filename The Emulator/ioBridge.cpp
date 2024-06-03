@@ -39,7 +39,7 @@ unsigned char memoryRead(void* arg, unsigned short addr)
 	{
 		if (addr < 0x4000)
 		{
-			return ((MemoryModule*)arg)->addressSpace[i]->data[addr];
+			return ((IoBridge*)arg)->memObj->addressSpace[i]->data[addr];
 		}
 		addr -= 0x4000;
 	}
@@ -53,7 +53,8 @@ void memoryWrite(void* arg, unsigned short addr, unsigned char value)
 	{
 		if (addr < 0x4000)
 		{
-			((MemoryModule*)arg)->addressSpace[i]->data[addr] = value;
+			if (((IoBridge*)arg)->memObj->addressSpace[i]->readOnly == false)
+				((IoBridge*)arg)->memObj->addressSpace[i]->data[addr] = value;
 			return;
 		}
 		addr -= 0x4000;

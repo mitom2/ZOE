@@ -7,6 +7,10 @@
 #include <cstdlib>
 #include <windows.h>
 
+void executeCPU(Z80* cpu)
+{
+	cpu->execute();
+}
 
 //External source start
 //https://helloacm.com/modern-getch-implementation-on-windows-cc/
@@ -40,51 +44,51 @@ int main()
 
 	bridge.init(&gpu, &io, &mem);
 
-	//Set color white
-	gpu.controlInput(gpuModulePort, 0b11100000);
-	gpu.controlInput(gpuModulePort, 0b00111111);
+	////Set color white
+	//gpu.controlInput(gpuModulePort, 0b11100000);
+	//gpu.controlInput(gpuModulePort, 0b00111111);
 
-	//Set pointer to 10x10
-	gpu.controlInput(gpuModulePort, 0b11000000);
-	gpu.controlInput(gpuModulePort, 10);
-	gpu.controlInput(gpuModulePort, 0);
-	gpu.controlInput(gpuModulePort, 10);
-	gpu.controlInput(gpuModulePort, 0);
+	////Set pointer to 10x10
+	//gpu.controlInput(gpuModulePort, 0b11000000);
+	//gpu.controlInput(gpuModulePort, 10);
+	//gpu.controlInput(gpuModulePort, 0);
+	//gpu.controlInput(gpuModulePort, 10);
+	//gpu.controlInput(gpuModulePort, 0);
 
-	//Draw character
-	gpu.controlInput(gpuModulePort, 0b01110000);
-	gpu.controlInput(gpuModulePort, 'Z');
+	////Draw character
+	//gpu.controlInput(gpuModulePort, 0b01110000);
+	//gpu.controlInput(gpuModulePort, 'Z');
 
-	//Draw character
-	gpu.controlInput(gpuModulePort, 0b01110000);
-	gpu.controlInput(gpuModulePort, '8');
+	////Draw character
+	//gpu.controlInput(gpuModulePort, 0b01110000);
+	//gpu.controlInput(gpuModulePort, '8');
 
-	//Draw character
-	gpu.controlInput(gpuModulePort, 0b01110000);
-	gpu.controlInput(gpuModulePort, '0');
+	////Draw character
+	//gpu.controlInput(gpuModulePort, 0b01110000);
+	//gpu.controlInput(gpuModulePort, '0');
 
-	//Draw character
-	gpu.controlInput(gpuModulePort, 0b01110000);
-	gpu.controlInput(gpuModulePort, ' ');
+	////Draw character
+	//gpu.controlInput(gpuModulePort, 0b01110000);
+	//gpu.controlInput(gpuModulePort, ' ');
 
-	//Draw character
-	gpu.controlInput(gpuModulePort, 0b01110000);
-	gpu.controlInput(gpuModulePort, 'P');
+	////Draw character
+	//gpu.controlInput(gpuModulePort, 0b01110000);
+	//gpu.controlInput(gpuModulePort, 'P');
 
-	//Draw character
-	gpu.controlInput(gpuModulePort, 0b01110000);
-	gpu.controlInput(gpuModulePort, 'C');
+	////Draw character
+	//gpu.controlInput(gpuModulePort, 0b01110000);
+	//gpu.controlInput(gpuModulePort, 'C');
 
-	//Set pointer to 10x30
-	gpu.controlInput(gpuModulePort, 0b11000000);
-	gpu.controlInput(gpuModulePort, 10);
-	gpu.controlInput(gpuModulePort, 0);
-	gpu.controlInput(gpuModulePort, 30);
-	gpu.controlInput(gpuModulePort, 0);
+	////Set pointer to 10x30
+	//gpu.controlInput(gpuModulePort, 0b11000000);
+	//gpu.controlInput(gpuModulePort, 10);
+	//gpu.controlInput(gpuModulePort, 0);
+	//gpu.controlInput(gpuModulePort, 30);
+	//gpu.controlInput(gpuModulePort, 0);
 
-	//Draw character
-	gpu.controlInput(gpuModulePort, 0b01110000);
-	gpu.controlInput(gpuModulePort, '>');
+	////Draw character
+	//gpu.controlInput(gpuModulePort, 0b01110000);
+	//gpu.controlInput(gpuModulePort, '>');
 
 	std::string inStr = "";
 	do
@@ -93,6 +97,8 @@ int main()
 		std::cout << "Z80 PC Emulator\n===============\nEnter path to the OS file\n\n>";
 		std::cin >> inStr;
 	} while (mem.loadOS(inStr) == false);
+
+	std::thread cpuTh(&executeCPU, &cpu);
 
 	int in = 0;
 	while (in != 4)
@@ -143,6 +149,7 @@ int main()
 		}
 	}
 
+	cpuTh.join();
 	gpu.turnOff();
 	th.join();
 }
