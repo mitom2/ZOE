@@ -94,7 +94,7 @@ int main()
 	do
 	{
 		system("cls");
-		std::cout << "Z80 PC Emulator\n===============\nEnter path to the OS file\n\n>";
+		std::cout << "Z80 PC Emulator\n===============\nEnter path to the OS file or enter OS name\n\n>";
 		std::cin >> inStr;
 	} while (mem.loadOS(inStr) == false);
 
@@ -149,6 +149,7 @@ int main()
 		}
 	}
 
+	cpu.requestBreak();
 	cpuTh.join();
 	gpu.turnOff();
 	th.join();

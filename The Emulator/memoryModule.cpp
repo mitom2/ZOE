@@ -2,18 +2,28 @@
 
 bool MemoryModule::loadOS(std::string path)
 {
-	std::ifstream in(path);
+	std::ifstream in(path, std::ios::binary);
 	if (in.good() == false)
 	{
 		in.close();
-		return false;
+		in.open("OS/" + path, std::ios::binary);
+		if (in.good() == false)
+		{
+			in.close();
+			in.open("OS/" + path + ".os", std::ios::binary);
+			if (in.good() == false)
+			{
+				in.close();
+				return false;
+			}
+		}
 	}
-	unsigned char input;
-	for (int i = 0; in >> input; i++)
+	std::string input((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+	for (int i = 0; i < input.length(); i++)
 	{
 		if (i == 0x4000)
 			break;
-		MemoryModule::romPages[0]->data[i] = input;
+		MemoryModule::romPages[0]->data[i] = input[i];
 	}
 	in.close();
 	return true;
