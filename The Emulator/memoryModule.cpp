@@ -37,6 +37,7 @@ MemoryModule::MemoryModule()
 	for (uint32_t i = 0; i < MemoryModule::maxPage; i++)
 	{
 		MemoryModule::pages.insert(std::pair<uint32_t, MemoryModule::MemoryPage*>(i, new MemoryModule::MemoryPage));
+		MemoryModule::pages[i]->readOnly = false;
 		memset(&(MemoryModule::pages[i]->data), 0, sizeof(MemoryModule::pages[i]->data));
 	}
 	for (uint32_t i = 0; i < MemoryModule::maxROM; i++)

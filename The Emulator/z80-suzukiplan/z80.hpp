@@ -5380,9 +5380,6 @@ class Z80
     static inline void RETI_(Z80* ctx) { ctx->RETI(); }
     inline void RETI()
     {
-#ifndef Z80_DISABLE_NESTCHECK
-        invokeReturnHandlers();
-#endif
 #ifndef Z80_DISABLE_DEBUG
         unsigned short pc = reg.PC;
         unsigned short sp = reg.SP;
@@ -5393,6 +5390,9 @@ class Z80
         reg.IFF &= ~IFF_IRQ();
 #ifndef Z80_DISABLE_DEBUG
         if (isDebug()) log("[%04X] RETI to $%04X (SP<$%04X>)", pc - 2, reg.PC, sp);
+#endif
+#ifndef Z80_DISABLE_NESTCHECK
+        invokeReturnHandlers();
 #endif
     }
 
