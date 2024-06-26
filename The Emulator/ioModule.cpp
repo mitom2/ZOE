@@ -13,6 +13,12 @@ void IoModule::readStorage(uint32_t sectorNum, int delay)
             IoModule::storageData.push_back(0);
         }
         IoModule::storageMtx.unlock();
+        if (IoModule::intEnabled == true)
+        {
+            IoModule::intInProg.acquire();
+            std::this_thread::sleep_for(std::chrono::microseconds(2));
+            IoModule::cpu->generateIRQ(storageVector);
+        }
         return;
     }
     std::string str;
