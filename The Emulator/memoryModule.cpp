@@ -33,7 +33,7 @@ MemoryModule::MemoryModule()
 {
 	MemoryModule::maxPage = 0x40;
 	MemoryModule::maxROM = 0x1;
-	MemoryModule::lockPageZero = true;
+	MemoryModule::lockPageZero = false;
 	for (uint32_t i = 0; i < MemoryModule::maxPage; i++)
 	{
 		MemoryModule::pages.insert(std::pair<uint32_t, MemoryModule::MemoryPage*>(i, new MemoryModule::MemoryPage));

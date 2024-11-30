@@ -10,8 +10,16 @@
 
 #define MAX_DEBUG_LOG_LENGTH 65535
 
+/// <summary>
+/// CPU time.
+/// </summary>
 uint32_t cpuTime;
 
+/// <summary>
+/// Begins CPU execution.
+/// </summary>
+/// <param name="cpu">CPU pointer</param>
+/// <param name="ioMod">I/O module pointer</param>
 void executeCPU(Z80* cpu, IoModule* ioMod)
 {
 	cpu->setConsumeClockCallback([&](void* arg, int clock) -> void
@@ -63,6 +71,9 @@ TCHAR getch() {
 }
 //External source end
 
+/// <summary>
+/// Main function, entry point for the app.
+/// </summary>
 int main()
 {
 	try

@@ -133,39 +133,89 @@ Writing into the device sets internal threshold that will trigger INT when reach
 
 #define beginVector 12
 
+/// <summary>
+/// This class emulates I/O module.
+/// </summary>
 class IoModule
 {
-
+	/// <summary>
+	/// CPU pointer.
+	/// </summary>
 	Z80* cpu;
 
+	/// <summary>
+	/// True to generate interrupts.
+	/// </summary>
 	bool intEnabled;
 
+	/// <summary>
+	/// List of I/O errors.
+	/// </summary>
 	std::list<unsigned char> errors;
 
+	/// <summary>
+	/// Data from keyboard.
+	/// </summary>
 	std::list<unsigned char> keyboardData;
 
+	/// <summary>
+	/// Data from storage.
+	/// </summary>
 	std::list<unsigned char> storageData;
 
+	/// <summary>
+	/// Pointer on HID.
+	/// </summary>
 	unsigned char ptrHID;
 
+	/// <summary>
+	/// Pointer on Storage device.
+	/// </summary>
 	unsigned char ptrStorage;
 
+	/// <summary>
+	/// Pointer on other device.
+	/// </summary>
 	unsigned char ptrOther;
 
+	/// <summary>
+	/// Custom timer ID.
+	/// </summary>
 	unsigned char customTimerId;
 
+	/// <summary>
+	/// Timer flags.
+	/// </summary>
 	unsigned char timerFlags;
 
+	/// <summary>
+	/// Selected sector for storage device.
+	/// </summary>
 	uint32_t selSector;
 
+	/// <summary>
+	/// Write size for storage device.
+	/// </summary>
 	uint32_t storageWriteSize;
 
+	/// <summary>
+	/// Write location for storage device.
+	/// </summary>
 	uint32_t storageWriteAddress;
 
+	/// <summary>
+	/// Timer errors.
+	/// </summary>
 	std::list<unsigned char> timerErrors;
 
+	/// <summary>
+	/// Mutex for storage device.
+	/// </summary>
 	std::mutex storageMtx;
 
+	/// <summary>
+	/// Semaphore for interrupts.
+	/// </summary>
 	std::binary_semaphore intInProg;
 
 	/*
@@ -200,40 +250,92 @@ class IoModule
 	28 - Other device 3rd B of data Wr
 	29 - Other device 4th B of data (MSB) Wr
 	*/
+
+	/// <summary>
+	/// Currently simulated behaviour.
+	/// </summary>
 	short current;
 
+	/// <summary>
+	/// Progress of read.
+	/// </summary>
 	short rdProg;
 
+	/// <summary>
+	/// Progress of write.
+	/// </summary>
 	short wrProg;
 
+	/// <summary>
+	/// CPU cycles.
+	/// </summary>
 	uint32_t* cpuCycles;
 
+	/// <summary>
+	/// Timer value.
+	/// </summary>
 	uint32_t timerVal;
 
+	/// <summary>
+	/// Timer threshold.
+	/// </summary>
 	uint32_t timerTh;
 
+	/// <summary>
+	/// Timer simulating thread.
+	/// </summary>
 	std::thread* timerThread;
 
+	/// <summary>
+	/// Stops the timer.
+	/// </summary>
 	bool stopTimer;
 
+	/// <summary>
+	/// Reads storage device.
+	/// </summary>
 	void readStorage(uint32_t sectorNum, int delay);
 
+	/// <summary>
+	/// Writes to storage device.
+	/// </summary>
 	void writeStorage(uint32_t sectorNum, uint32_t address, unsigned char value, int delay);
 
+	/// <summary>
+	/// Manages timer emulation.
+	/// </summary>
 	void timerSimulator();
 
 public:
 
+	/// <summary>
+	/// Default constructor.
+	/// </summary>
 	IoModule(Z80* cpuObj, uint32_t* cpuTime);
 
+	/// <summary>
+	/// Default destructor.
+	/// </summary>
 	~IoModule();
 
+	/// <summary>
+	/// Input detected.
+	/// </summary>
 	void busInput(unsigned short port, unsigned char value);
 
+	/// <summary>
+	/// Output requested.
+	/// </summary>
 	unsigned char busOutput(unsigned short port);
 
+	/// <summary>
+	/// Keyboard action detected.
+	/// </summary>
 	void keyboardInput(unsigned char value);
 
+	/// <summary>
+	/// Finished interrupt.
+	/// </summary>
 	void intFinished();
 
 };
