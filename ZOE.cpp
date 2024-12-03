@@ -5,10 +5,41 @@
 #include "ioBridge.hpp"
 #include <thread>
 #include <cstdlib>
-#include <windows.h>
 #include <fstream>
 
-#define MAX_DEBUG_LOG_LENGTH 65535
+#ifdef _WIN32
+	#include <windows.h>
+#else
+	#include "curses.h"
+#endif
+
+int getchar()
+{
+	#ifdef _WIN32
+		//External source start
+		//https://helloacm.com/modern-getch-implementation-on-windows-cc/
+		DWORD mode, cc;
+		HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
+		if (h == NULL) {
+			return 0;
+		}
+		GetConsoleMode(h, &mode);
+		SetConsoleMode(h, mode & ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT));
+		TCHAR c = 0;
+		ReadConsole(h, &c, 1, &cc, NULL);
+		SetConsoleMode(h, mode);
+		return c;
+		//External source end
+	#else
+		initscr();
+		int ch=getch();
+		endwin();
+		return ch;
+	#endif
+}
+
+
+unsigned long long maxDebugLogLength = 0;
 
 /// <summary>
 /// CPU time.
@@ -37,44 +68,27 @@ void executeCPU(Z80* cpu, IoModule* ioMod)
 	cpu->setDebugMessage([&](void* arg, const char* message) -> void {
 		dCtr++;
 		dLog.flush();
-		if (dCtr <= MAX_DEBUG_LOG_LENGTH)
+		if (dCtr <= maxDebugLogLength)
 		{
 			time_t t1 = time(NULL);
 			struct tm* t2 = localtime(&t1);
 			dLog << "[" << t2->tm_hour << ":" << t2->tm_min << ":" << t2->tm_sec << "]: " << message << "\n";
 			dLog.flush();
-			if (dCtr == MAX_DEBUG_LOG_LENGTH)
+			if (dCtr == maxDebugLogLength)
 				dLog << "Log max size reached.";
 		}
 		});
-	cpu->addBreakOperand(0xED, 0x4D, [&](void* arg, unsigned char* opcode, int opcodeLength) -> void {
-		ioMod->intFinished();
-		});
+		/*cpu->addBreakOperand(0xFE, 61, [&](void* arg, unsigned char* opcode, int opcodeLength) -> void {
+		std::cout << "Breakpoint reached.";
+		});*/
 	cpu->execute();
 	dLog.close();
 }
 
-//External source start
-//https://helloacm.com/modern-getch-implementation-on-windows-cc/
-TCHAR getch() {
-	DWORD mode, cc;
-	HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
-	if (h == NULL) {
-		return 0;
-	}
-	GetConsoleMode(h, &mode);
-	SetConsoleMode(h, mode & ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT));
-	TCHAR c = 0;
-	ReadConsole(h, &c, 1, &cc, NULL);
-	SetConsoleMode(h, mode);
-	return c;
-}
-//External source end
-
 /// <summary>
 /// Main function, entry point for the app.
 /// </summary>
-int main()
+int main(int argc, char** argv)
 {
 	try
 	{
@@ -101,6 +115,14 @@ int main()
 			std::cin >> inStr;
 		} while (mem.loadOS(inStr) == false);
 
+		inStr = "";
+		do
+		{
+			system("cls");
+			std::cout << "Z80 PC Emulator\n===============\nEnter max log size:\n\n>";
+			std::cin >> inStr;
+		} while (!(maxDebugLogLength = std::strtoull(inStr.c_str(), NULL, 0)));
+
 		std::thread cpuTh(&executeCPU, &cpu, &io);
 
 		int in = 0;
@@ -113,8 +135,8 @@ int main()
 			{
 				system("cls");
 				std::cout << "Keyboard emulation\n==================\nWrite ~ to go back\n\n>";
-				TCHAR k;
-				while ((k = getch()) != '~')
+				int k;
+				while ((k = getchar()) != '~')
 				{
 					io.keyboardInput(k);
 				}
@@ -157,7 +179,7 @@ int main()
 		gpu.turnOff();
 		th.join();
 	}
-	catch(std::exception& e)
+	catch(std::runtime_error& e)
 	{
 		std::cout << "EXCEPTION: " << e.what() << "\n";
 	}

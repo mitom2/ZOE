@@ -68,7 +68,7 @@ void IoModule::writeStorage(uint32_t sectorNum, uint32_t address, unsigned char 
     if (out.good() == false)
     {
         out.close();
-        throw std::exception("Could not create disk entry");
+        throw std::runtime_error("Could not create disk entry");
         return;
     }
     for (int i = 0; i < prev.size(); i++)
@@ -146,7 +146,7 @@ void IoModule::busInput(unsigned short port, unsigned char value)
 {
     if (port != ioModulePort && port != ioModulePort + 1)
     {
-        throw std::exception("IO module bus input access denied");
+        throw std::runtime_error("IO module bus input access denied");
         return;
     }
     if (value == cmd_cancelRead)
@@ -228,7 +228,7 @@ void IoModule::busInput(unsigned short port, unsigned char value)
         }
         else if (value == cmd_setRetMdStorage)
         {
-            throw std::exception("Storage device return mode 0 is not currently supported");
+            throw std::runtime_error("Storage device return mode 0 is not currently supported");
         }
         else if (value == cmd_setRetMdStorage + 1)
         {
@@ -247,7 +247,7 @@ void IoModule::busInput(unsigned short port, unsigned char value)
         }
         else if (value == cmd_ramDestStorage)
         {
-            throw std::exception("Storage device return mode 0 is not currently supported");
+            throw std::runtime_error("Storage device return mode 0 is not currently supported");
         }
         else if (value == cmd_selSectStorage)
         {
@@ -358,7 +358,7 @@ void IoModule::busInput(unsigned short port, unsigned char value)
     {
         IoModule::current = 16;
         if (value != 0b10000000)
-            throw std::exception("Selected unsupported storage write source");
+            throw std::runtime_error("Selected unsupported storage write source");
     }
     else if (IoModule::current == 16)
     {
@@ -447,7 +447,7 @@ unsigned char IoModule::busOutput(unsigned short port)
 {
     if (port != ioModulePort && port != ioModulePort + 1)
     {
-        throw std::exception("IO module bus output access denied");
+        throw std::runtime_error("IO module bus output access denied");
         return 0;
     }
 
@@ -581,7 +581,7 @@ unsigned char IoModule::busOutput(unsigned short port)
         if (IoModule::ptrOther == timerID)
             return IoModule::customTimerId;
     }
-    //throw std::exception("IO bus output reached end without data acquisition");
+    //throw std::runtime_error("IO bus output reached end without data acquisition");
     IoModule::errors.push_back(0b0010);
     return 0;
 }

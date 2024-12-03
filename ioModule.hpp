@@ -7,6 +7,7 @@
 #include <thread>
 #include <mutex>
 #include <semaphore>
+#include <stdexcept>
 #include "z80-suzukiplan/z80.hpp"
 
 #define ioModulePort 0b10001110

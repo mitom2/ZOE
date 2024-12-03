@@ -4,6 +4,7 @@
 #include <mutex>
 #include <cmath>
 #include <fstream>
+#include <stdexcept>
 
 #define hideCur true
 #define gpuCharGenThr 96

@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <string>
 #include <fstream>
+#include <stdexcept>
+#include <cstring>
 
 #define memoryModulePort 0b10111100
 

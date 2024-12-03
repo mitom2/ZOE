@@ -7,14 +7,14 @@ bool GpuModule::createCharacterFile(char character, int x, int y)
     if (charFile.good() == false)
     {
         charFile.close();
-        throw std::exception("GPU could not create character file");
+        throw std::runtime_error("GPU could not create character file");
         return true;
     }
     sf::Font font;
     if (font.loadFromFile("gpuCharacters/ChivoMono-Regular.ttf") == false)
     {
         charFile.close();
-        throw std::exception("GPU could load character definition");
+        throw std::runtime_error("GPU could load character definition");
         return true;
     }
     std::string c = "_";
@@ -23,7 +23,7 @@ bool GpuModule::createCharacterFile(char character, int x, int y)
     sf::RenderTexture rendT;
     if (rendT.create(characterSizeX, characterSizeY) == false)
     {
-        throw std::exception("GPU could not generate character");
+        throw std::runtime_error("GPU could not generate character");
         return true;
     }
     ch.setOrigin(0, 0);
@@ -393,7 +393,7 @@ void GpuModule::display()
     cur.setFillColor(sf::Color(0, 0, 255, 128));
 
     float fps;
-    sf::Clock clock = sf::Clock::Clock();
+    sf::Clock clock = sf::Clock();
     sf::Time previousTime = clock.getElapsedTime();
     sf::Time currentTime;
 
@@ -437,7 +437,7 @@ void GpuModule::controlInput(unsigned short address, unsigned char value)
 {
     if (address != gpuModulePort && address != gpuModulePort + 1)
     {
-        throw std::exception("GPU module control access denied");
+        throw std::runtime_error("GPU module control access denied");
         return;
     }
     GpuModule::listMtx.lock();

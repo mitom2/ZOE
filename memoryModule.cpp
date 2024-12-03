@@ -56,33 +56,36 @@ void MemoryModule::controlOperation(unsigned short addr, unsigned char value)
 {
 	if (addr != memoryModulePort && addr != memoryModulePort + 1 && addr != memoryModulePort + 2 && addr != memoryModulePort + 3)
 	{
-		throw std::exception("Memory module control access denied");
+		throw std::runtime_error("Memory module control access denied");
 		return;
 	}
 	addr -= memoryModulePort;
 	value = value >= MemoryModule::maxPage ? MemoryModule::maxPage - 1 : value;
-	if (addr == 0)
+	if (addr == 1)
 	{
 		MemoryModule::addressSpace[1] = MemoryModule::pages[value];
 		return;
 	}
-	if (addr == 1)
+	if (addr == 2)
 	{
 		MemoryModule::addressSpace[2] = MemoryModule::pages[value];
 		return;
 	}
-	if (addr == 2)
+	if (addr == 3)
 	{
 		MemoryModule::addressSpace[3] = MemoryModule::pages[value];
 		return;
 	}
-	if (addr == 4)
+	if (addr == 0)
 	{
 		if (MemoryModule::lockPageZero)
 		{
-			throw std::exception("Attempted to change page 0 when switching prohibited");
+			throw std::runtime_error("Attempted to change page 0 when switching prohibited");
 			return;
 		}
-		MemoryModule::addressSpace[0] = MemoryModule::romPages[value];
+		if ((value & 0b100000) == 0b100000)
+			MemoryModule::addressSpace[0] = MemoryModule::romPages[0];
+		else
+			MemoryModule::addressSpace[0] = MemoryModule::pages[value];
 	}
 }

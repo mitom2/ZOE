@@ -43,7 +43,7 @@ unsigned char memoryRead(void* arg, unsigned short addr)
 		}
 		addr -= 0x4000;
 	}
-	throw std::exception("Memory read beyond address space");
+	throw std::runtime_error("Memory read beyond address space");
 	return 0x76;
 }
 
@@ -59,5 +59,5 @@ void memoryWrite(void* arg, unsigned short addr, unsigned char value)
 		}
 		addr -= 0x4000;
 	}
-	throw std::exception("Memory write beyond address space");
+	throw std::runtime_error("Memory write beyond address space");
 }
