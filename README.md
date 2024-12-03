@@ -55,6 +55,7 @@ Run the emulator:
 
 - Launch the emulator.
 - Enter path to program (OS) file or enter its name.
+- Enter max log length.
 - Emulated display should at this point be operational.
 - Use the interactive menu to emulate keyboard or execute custom commands on GPU and I/O modules.
 - View logs in debug.log for troubleshooting.
