@@ -36,8 +36,6 @@ The emulator is written in C++ and relies on multithreading and modern object-or
 - Interfaces for GPU and I/O programming.
 ## Run Locally
 
-Clone the project
-
 ```bash
   git clone https://github.com/mitom2/ZOE.git
   cd ZOE
