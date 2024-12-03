@@ -40,26 +40,19 @@ Clone the project
 
 ```bash
   git clone https://github.com/mitom2/ZOE.git
-```
-
-Go to the project directory
-
-```bash
   cd ZOE
+  mkdir build
+  cd build
+  cmake ..
+  make
 ```
 
-Compile using a C++ compiler with C++17 support:
-
-```bash
-  g++ "The Emulator.cpp" -std=c++17 -lpthread -o ZOE
-```
+Copy gpuCharacters directory to location where compiled program is located. Also create there OS directory, where you can place your programs, and ioDisk directory.
 
 Run the emulator:
 ```bash
   ./ZOE
 ```
-
-Note: SFML is required.
 ## Usage
 
 - Launch the emulator.
