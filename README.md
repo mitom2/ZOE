@@ -1,7 +1,7 @@
 
 # Z80 pc Open-source Emulator
 
-This project is an emulatior of a custom Z80-based PC, featuring modules for GPU, I/O, and Memory management. It enables programming of GPU and I/O modules, simulates storage and timer behavior, and handles CPU execution and debugging.
+This project is an emulator of a custom Z80-based PC, featuring modules for GPU, I/O, and Memory management. It enables programming of GPU and I/O modules, simulates storage and timer behavior, and handles CPU execution and debugging.
 
 The emulator is written in C++ and relies on multithreading and modern object-oriented design for module interaction.
 
