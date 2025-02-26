@@ -588,6 +588,8 @@ unsigned char IoModule::busOutput(unsigned short port)
 
 void IoModule::keyboardInput(unsigned char value)
 {
+    if(!value)
+        return;
     IoModule::keyboardData.push_back(value);
     if (IoModule::intEnabled == true)
     {

@@ -111,7 +111,7 @@ int main(int argc, char** argv)
 		do
 		{
 			system("cls");
-			std::cout << "Z80 PC Emulator\n===============\nEnter path to the OS file or enter OS name\n\n>";
+			std::cout << "Z80 PC Emulator\n===============\nEnter path to the OS file or enter OS name\n\n>"<< std::flush;
 			std::cin >> inStr;
 		} while (mem.loadOS(inStr) == false);
 
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
 		do
 		{
 			system("cls");
-			std::cout << "Z80 PC Emulator\n===============\nEnter max log size:\n\n>";
+			std::cout << "Z80 PC Emulator\n===============\nEnter max log size:\n\n>"<< std::flush;
 			std::cin >> inStr;
 		} while (!(maxDebugLogLength = std::strtoull(inStr.c_str(), NULL, 0)));
 
@@ -129,12 +129,12 @@ int main(int argc, char** argv)
 		while (in != 4)
 		{
 			system("cls");
-			std::cout << "Z80 PC Emulator\n===============\n1. Keyboard emulation\n2. GPU module programming\n3. I/O module programming\n4. Exit\n\n>";
+			std::cout << "Z80 PC Emulator\n===============\n1. Keyboard emulation\n2. GPU module programming\n3. I/O module programming\n4. Exit\n\n>"<< std::flush;
 			std::cin >> in;
 			if (in == 1)
 			{
 				system("cls");
-				std::cout << "Keyboard emulation\n==================\nWrite ~ to go back\n\n>";
+				std::cout << "Keyboard emulation\n==================\nWrite ~ to go back\n\n>"<< std::flush;
 				int k;
 				while ((k = getchar()) != '~')
 				{
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
 				while (in != -1)
 				{
 					system("cls");
-					std::cout << "GPU programming\n===============\n-1 to go back\n\n>";
+					std::cout << "GPU programming\n===============\n-1 to go back\n\n>"<< std::flush;
 					std::cin >> in;
 					if (in >= 0)
 						gpu.controlInput(gpuModulePort, in);
@@ -161,11 +161,11 @@ int main(int argc, char** argv)
 					{
 						std::string str = " ";
 						str[0] = io.busOutput(ioModulePort);
-						std::cout << "I/O programming\n===============\n-1 to go back, -2 to get single output\n\nI/O response: " << std::to_string(str[0]) << " '" << str << "'\n\n>";
+						std::cout << "I/O programming\n===============\n-1 to go back, -2 to get single output\n\nI/O response: " << std::to_string(str[0]) << " '" << str << "'\n\n>"<< std::flush;
 					}
 					else
 					{
-						std::cout << "I/O programming\n===============\n-1 to go back, -2 to get single output\n\n>";
+						std::cout << "I/O programming\n===============\n-1 to go back, -2 to get single output\n\n>"<< std::flush;
 					}
 					std::cin >> in;
 					if (in >= 0)
